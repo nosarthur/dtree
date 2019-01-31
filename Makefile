@@ -1,4 +1,4 @@
 install:
 	go install
 test:
-	go test ./git ./tree -coverprofile cover.out
+	go test -race -v ./git ./db -coverprofile cover.out

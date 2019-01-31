@@ -43,22 +43,26 @@ type Repo struct {
 	Msg  *string
 }
 
-func mustConnect() *sqlx.DB {
-
+func mustConnect(path string) *sqlx.DB {
+	if path == "" {
+		path = getDBPath()
+	}
 	// Foreign key is off by default for sqlite
-	src := fmt.Sprintf("file:%s?foreign_keys=on", getDBPath())
+	src := fmt.Sprintf("file:%s?foreign_keys=on", path)
 	db := sqlx.MustOpen("sqlite3", src)
 
 	return db
 }
 
 // MustInit initializes the DB if it is not present, then sets the global DB connection.
-func MustInit() {
-	path := getDBPath()
+func MustInit(path string) {
+	if path == "" {
+		path = getDBPath()
+	}
 	_, err := os.Stat(path)
 	if err == nil {
 		// connect to existing DB
-		conn = mustConnect()
+		conn = mustConnect(path)
 	} else if os.IsNotExist(err) {
 		_, err = os.Create(path)
 		if err != nil {
@@ -66,7 +70,7 @@ func MustInit() {
 			os.Exit(1)
 		}
 		// create tables
-		conn = mustConnect()
+		conn = mustConnect(path)
 		conn.MustExec(schema)
 		fmt.Printf("DB file created at %s", path)
 	} else {

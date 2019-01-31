@@ -42,5 +42,5 @@ func Execute() {
 
 func init() {
 	// create the DB if necessary and then connect to it
-	db.MustInit()
+	db.MustInit("")
 }

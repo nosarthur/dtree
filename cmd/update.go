@@ -22,10 +22,11 @@ import (
 
 // updateCmd represents the update command
 var updateCmd = &cobra.Command{
-	Use:   "update",
-	Short: "A brief description of your command",
+	Use:   "update [repo]",
+	Short: "Update import relationships for the selected repo.",
 	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
+		// TODO
 		fmt.Println("update called")
 	},
 }
