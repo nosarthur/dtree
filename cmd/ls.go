@@ -27,8 +27,9 @@ import (
 
 // lsCmd represents the ls command
 var lsCmd = &cobra.Command{
-	Use:   "ls",
-	Short: "Show all repos",
+	Use:   "ls [repo-name]",
+	Args:  cobra.MaximumNArgs(1),
+	Short: "Show information of all repos, or statistics of a single repo.",
 	Run: func(cmd *cobra.Command, args []string) {
 		var (
 			reposToDelete, hashAndMsg []string

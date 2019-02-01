@@ -22,7 +22,7 @@ import (
 
 // checkCmd represents the check command
 var checkCmd = &cobra.Command{
-	Use:   "check [repo-name:file-name]",
+	Use:   "check <repo-name:file-name>",
 	Args:  cobra.ExactArgs(1),
 	Short: "Display the import dependence of the specified file",
 	Run: func(cmd *cobra.Command, args []string) {

@@ -22,11 +22,12 @@ import (
 
 // updateCmd represents the update command
 var updateCmd = &cobra.Command{
-	Use:   "update [repo]",
-	Short: "Update import relationships for the selected repo.",
+	Use:   "update [repo-name(s)]",
+	Short: "Update import relationships for the selected repos, or all repos if not specified.",
 	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		// TODO
+		// TODO: compare the commit hash and only work on the files that changed
+		//
 		fmt.Println("update called")
 	},
 }

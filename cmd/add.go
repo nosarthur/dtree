@@ -26,7 +26,7 @@ import (
 
 // addCmd represents the add command
 var addCmd = &cobra.Command{
-	Use:   "add [repo-path(s)]",
+	Use:   "add <repo-path(s)>",
 	Args:  cobra.MinimumNArgs(1),
 	Short: "Add git repo paths",
 	Run: func(cmd *cobra.Command, args []string) {

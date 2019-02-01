@@ -21,7 +21,7 @@ import (
 
 // rmCmd represents the rm command
 var rmCmd = &cobra.Command{
-	Use:   "rm [repo-name]",
+	Use:   "rm <repo-name>",
 	Args:  cobra.MinimumNArgs(1),
 	Short: "Remove git repo(s)",
 	Run: func(cmd *cobra.Command, args []string) {
