@@ -15,21 +15,27 @@ var (
 	conn   *sqlx.DB // global connection singleton
 	schema = `
 CREATE TABLE repo (
-    name VARCHAR(31),
+    name VARCHAR(31) NOT NULL,
     path VARCHAR(255) PRIMARY KEY,
-    msg  VARCHAR(255)
+    msg  VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE file (
-    name VARCHAR(31),
-    path VARCHAR(255),
-	repo_name VARCHAR(31),
-	FOREIGN KEY(repo_name) REFERENCES repo(name)
+	id 	 INTEGER PRIMARY KEY,
+    name VARCHAR(31) NOT NULL,
+    path VARCHAR(255) NOT NULL,
+	repo_name VARCHAR(31) NOT NULL,
+	FOREIGN KEY(repo_name) REFERENCES repo(name) ON DELETE CASCADE
 );
 
 CREATE TABLE import (
-a INTEGER
-);`
+	importer INTEGER NOT NULL,
+	importee INTEGER NOT NULL,
+	FOREIGN KEY(importer) REFERENCES file(id) ON DELETE CASCADE,
+	FOREIGN KEY(importee) REFERENCES file(id) ON DELETE CASCADE,
+	UNIQUE (importer, importee)
+);
+`
 
 	insertRepo = `
 INSERT INTO repo(name, path, msg)

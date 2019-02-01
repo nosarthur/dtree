@@ -23,8 +23,12 @@ func ReadRepos() ([]Repo, error) {
 }
 
 // DeleteRepos deletes the selected repos
-func DeleteRepos(paths []string) error {
-	// TODO
-	fmt.Println("write to db")
-	return nil
+func DeleteRepos(paths []string) {
+	for _, path := range paths {
+		_, err := conn.Exec("DELETE FROM repo WHERE path=$1", path)
+		if err != nil {
+			fmt.Printf("fail to delete repo %s: %v", path, err)
+			continue
+		}
+	}
 }
