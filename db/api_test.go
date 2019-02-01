@@ -29,7 +29,7 @@ func TestRepoAPI(t *testing.T) {
 	assert.Equal(t, repos[0], r)
 
 	// delete
-	db.DeleteRepos([]string{path})
+	db.DeleteRepos([]string{name})
 	repos, err = db.ReadRepos()
 	assert.Empty(t, repos, "DB is not empty")
 }

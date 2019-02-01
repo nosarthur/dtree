@@ -8,6 +8,7 @@ Dependence checker for python repositories
 * add [repo-path(s)]
 * check [repo:file]
 * ls
+* rm [repo-name(s)]
 * update [repo]
 
 ## todo
