@@ -3,16 +3,18 @@ package db
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"github.com/jmoiron/sqlx"
-	_ "github.com/mattn/go-sqlite3"
-	homedir "github.com/mitchellh/go-homedir"
+	_ "github.com/mattn/go-sqlite3" // DB initializer
 )
+
+// Handle exposes the DB APIs
+type Handle struct {
+	*sqlx.DB
+}
 
 // There is redundancy in `name` and `path`. But it may be convenient.
 var (
-	conn   *sqlx.DB // global connection singleton
 	schema = `
 CREATE TABLE repo (
     name VARCHAR(31) NOT NULL,
@@ -49,48 +51,35 @@ type Repo struct {
 	Msg  *string
 }
 
-func mustConnect(path string) *sqlx.DB {
-	if path == "" {
-		path = getDBPath()
-	}
-	// Foreign key is off by default for sqlite
+func mustConnect(path string) Handle {
+	// Sqlite has foreign key turned off by default
 	src := fmt.Sprintf("file:%s?foreign_keys=on", path)
 	db := sqlx.MustOpen("sqlite3", src)
 
-	return db
+	return Handle{db}
 }
 
-// MustInit initializes the DB if it is not present, then sets the global DB connection.
-func MustInit(path string) {
-	if path == "" {
-		path = getDBPath()
-	}
+// MustInit create the DB file at path if it is not present, initializes it, and
+// returns a DB handle. If the DB file already exists, simply return a handle.
+func MustInit(path string) Handle {
+
 	_, err := os.Stat(path)
-	if err == nil {
-		// connect to existing DB
-		conn = mustConnect(path)
-	} else if os.IsNotExist(err) {
+
+	if os.IsNotExist(err) {
 		_, err = os.Create(path)
 		if err != nil {
 			fmt.Printf("failed to create DB %s: %v", path, err)
 			os.Exit(1)
 		}
 		// create tables
-		conn = mustConnect(path)
-		conn.MustExec(schema)
+		h := mustConnect(path)
+		h.MustExec(schema)
 		fmt.Printf("DB file created at %s", path)
-	} else {
+		return h
+	} else if err != nil {
 		fmt.Printf("failed to initialize DB at %s: %v\n", path, err)
 		os.Exit(1)
 	}
-}
-
-// getDBPath returns the location of the DB file
-func getDBPath() string {
-	home, err := homedir.Dir()
-	if err != nil {
-		fmt.Printf("failed to get home directory: %v", err)
-		os.Exit(1)
-	}
-	return filepath.Join(home, "./dtree.db")
+	// connect to existing DB
+	return mustConnect(path)
 }
