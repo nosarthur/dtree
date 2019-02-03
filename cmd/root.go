@@ -17,12 +17,16 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
+	"github.com/mitchellh/go-homedir"
 	"github.com/nosarthur/dtree/db"
 	"github.com/spf13/cobra"
 )
 
-var cfgFile string
+var (
+	dbHandle db.Handle
+)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -41,6 +45,12 @@ func Execute() {
 }
 
 func init() {
-	// create the DB if necessary and then connect to it
-	db.MustInit("")
+	// create the DB at home directory if not present and then connect to it
+	home, err := homedir.Dir()
+	if err != nil {
+		fmt.Printf("failed to get home directory: %v", err)
+		os.Exit(1)
+	}
+	dbPath := filepath.Join(home, "./dtree.db")
+	dbHandle = db.MustInit(dbPath)
 }

@@ -38,7 +38,7 @@ var addCmd = &cobra.Command{
 		)
 
 		// load repos from DB
-		repos, err := db.ReadRepos()
+		repos, err := dbHandle.ReadRepos()
 		if err != nil {
 			fmt.Printf("failed to read repos from DB: %v", err)
 			os.Exit(1)
@@ -76,7 +76,7 @@ var addCmd = &cobra.Command{
 			}
 		}
 
-		db.CreateRepos(newRepos)
+		dbHandle.CreateRepos(newRepos)
 	},
 }
 

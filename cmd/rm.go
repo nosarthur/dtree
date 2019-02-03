@@ -15,7 +15,6 @@
 package cmd
 
 import (
-	"github.com/nosarthur/dtree/db"
 	"github.com/spf13/cobra"
 )
 
@@ -25,7 +24,7 @@ var rmCmd = &cobra.Command{
 	Args:  cobra.MinimumNArgs(1),
 	Short: "Remove git repo(s)",
 	Run: func(cmd *cobra.Command, args []string) {
-		db.DeleteRepos(args)
+		dbHandle.DeleteRepos(args)
 	},
 }
 

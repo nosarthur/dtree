@@ -3,9 +3,9 @@ package db
 import "fmt"
 
 // CreateRepos writes to DB
-func CreateRepos(rs []Repo) {
+func (h Handle) CreateRepos(rs []Repo) {
 	for _, repo := range rs {
-		_, err := conn.NamedExec(insertRepo, repo)
+		_, err := h.NamedExec(insertRepo, repo)
 		if err != nil {
 			fmt.Printf("fail to add repo %s to DB: %v\n", *repo.Name, err)
 		}
@@ -13,9 +13,9 @@ func CreateRepos(rs []Repo) {
 }
 
 // ReadRepos returns all repos in DB
-func ReadRepos() ([]Repo, error) {
+func (h Handle) ReadRepos() ([]Repo, error) {
 	repos := []Repo{}
-	err := conn.Select(&repos, "SELECT * FROM repo ORDER BY name ASC")
+	err := h.Select(&repos, "SELECT * FROM repo ORDER BY name ASC")
 	if err != nil {
 		return nil, fmt.Errorf("fail to read repos from DB: %v", err)
 	}
@@ -23,9 +23,9 @@ func ReadRepos() ([]Repo, error) {
 }
 
 // DeleteRepos deletes the selected repos
-func DeleteRepos(names []string) {
+func (h Handle) DeleteRepos(names []string) {
 	for _, name := range names {
-		_, err := conn.Exec("DELETE FROM repo WHERE name=$1", name)
+		_, err := h.Exec("DELETE FROM repo WHERE name=$1", name)
 		if err != nil {
 			fmt.Printf("fail to delete repo %s: %v", name, err)
 			continue

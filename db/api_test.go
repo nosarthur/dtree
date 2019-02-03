@@ -12,9 +12,9 @@ func TestRepoAPI(t *testing.T) {
 	testdb, teardown := setup(t)
 	defer teardown()
 
-	db.MustInit(testdb)
+	h := db.MustInit(testdb)
 	// read
-	repos, err := db.ReadRepos()
+	repos, err := h.ReadRepos()
 	require.Nil(t, err, "fail to read repos")
 	assert.Empty(t, repos, "DB is not empty")
 
@@ -23,13 +23,13 @@ func TestRepoAPI(t *testing.T) {
 	path := "test path"
 	msg := "test msg"
 	r := db.Repo{&name, &path, &msg}
-	db.CreateRepos([]db.Repo{r})
-	repos, err = db.ReadRepos()
+	h.CreateRepos([]db.Repo{r})
+	repos, err = h.ReadRepos()
 	assert.Equal(t, 1, len(repos))
 	assert.Equal(t, repos[0], r)
 
 	// delete
-	db.DeleteRepos([]string{name})
-	repos, err = db.ReadRepos()
+	h.DeleteRepos([]string{name})
+	repos, err = h.ReadRepos()
 	assert.Empty(t, repos, "DB is not empty")
 }

@@ -19,7 +19,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/nosarthur/dtree/db"
 	"github.com/nosarthur/dtree/git"
 	"github.com/nosarthur/tree"
 	"github.com/spf13/cobra"
@@ -35,7 +34,7 @@ var lsCmd = &cobra.Command{
 			reposToDelete, hashAndMsg []string
 		)
 
-		repos, err := db.ReadRepos()
+		repos, err := dbHandle.ReadRepos()
 		if err != nil {
 			fmt.Printf("failed to read repos from DB: %v", err)
 			os.Exit(1)
@@ -49,7 +48,7 @@ var lsCmd = &cobra.Command{
 			fmt.Printf("%-18s %s%s", *repo.Name, tree.Colorize(hashAndMsg[0], tree.Blue), hashAndMsg[1])
 		}
 		if len(reposToDelete) > 0 {
-			db.DeleteRepos(reposToDelete)
+			dbHandle.DeleteRepos(reposToDelete)
 		}
 
 	},

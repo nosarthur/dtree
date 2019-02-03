@@ -13,7 +13,7 @@ import (
 )
 
 func setup(t *testing.T) (string, func()) {
-	//	t.Parallel()
+	t.Parallel()
 
 	const testdb = "test.db"
 	dir, err := ioutil.TempDir("", "")
