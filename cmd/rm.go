@@ -24,6 +24,7 @@ var rmCmd = &cobra.Command{
 	Args:  cobra.MinimumNArgs(1),
 	Short: "Remove git repo(s)",
 	Run: func(cmd *cobra.Command, args []string) {
+		dbHandle := getDBHandle()
 		dbHandle.DeleteRepos(args)
 	},
 }

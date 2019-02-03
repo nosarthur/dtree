@@ -38,6 +38,7 @@ var addCmd = &cobra.Command{
 		)
 
 		// load repos from DB
+		dbHandle := getDBHandle()
 		repos, err := dbHandle.ReadRepos()
 		if err != nil {
 			fmt.Printf("failed to read repos from DB: %v", err)

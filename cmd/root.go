@@ -24,10 +24,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	dbHandle db.Handle
-)
-
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:     "dtree",
@@ -44,7 +40,7 @@ func Execute() {
 	}
 }
 
-func init() {
+func getDBHandle() db.Handle {
 	// create the DB at home directory if not present and then connect to it
 	home, err := homedir.Dir()
 	if err != nil {
@@ -52,5 +48,5 @@ func init() {
 		os.Exit(1)
 	}
 	dbPath := filepath.Join(home, "./dtree.db")
-	dbHandle = db.MustInit(dbPath)
+	return db.MustInit(dbPath)
 }

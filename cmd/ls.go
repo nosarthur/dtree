@@ -34,6 +34,7 @@ var lsCmd = &cobra.Command{
 			reposToDelete, hashAndMsg []string
 		)
 
+		dbHandle := getDBHandle()
 		repos, err := dbHandle.ReadRepos()
 		if err != nil {
 			fmt.Printf("failed to read repos from DB: %v", err)
